@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    const ls = new Promise((resolve, reject) => {
+      setTimeout(() => resolve('Launch School'), 2000);
+    });
+
+    ls.then((result) => console.log(result));
+
+    const ls2 = new Promise((resolve, reject) => {
+      setTimeout(() => reject('Error: Not Launch School'), 2000);
+    });
+
+    ls2.catch((error) => console.log(error));
+
+    const ls3 = new Promise((resolve, reject) => {
+      resolve('resolved!');
+      reject('rejected!');
+    })
+
+    ls3.then((result) => {
+      console.log(result);
+    }, (error) => {
+      console.log(error);
+    }).catch(error => console.log(error));
+  </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Adding Schedules</title>
+  <link rel="icon" href="data:,">
+  <style>
+    fieldset {
+      border: black normal 2px;
+    }
+    label {
+      display: block;
+      padding: 10px 0;
+    }
+    button {
+      margin: 20px 0;
+    }
+  </style>
+  <script>
+    function populateStaff() {
+      const select = document.querySelector('select');
+
+      const request = new XMLHttpRequest();
+      request.responseType = 'json';
+      request.open('GET', 'http://localhost:3000/api/staff_members');
+      request.addEventListener('load', (event) => {
+        const staffs = request.response;
+        staffs.forEach(staff => {
+          const option = document.createElement('option');
+          option.value = staff.id;
+          option.textContent = staff.name;
+          select.appendChild(option);
+        });
+      });
+
+      request.send();
+    }
+
+
+    function addScheduleForm() {
+      const form = document.querySelector('form');
+      const submit = document.querySelector('#submit');
+      const fieldset = document.querySelector('#schedule1');
+
+      const number = document.querySelectorAll('fieldset').length + 1;
+      const newFieldset = fieldset.cloneNode(true);
+      newFieldset.id = `schedule${number}`;
+      const legend = newFieldset.querySelector('legend');
+      legend.textContent = `Schedule ${number}`;
+
+      form.insertBefore(newFieldset, submit);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateStaff();
+
+      const addButton = document.querySelector('#add_schedules');
+      addButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        addScheduleForm();
+      });
+
+      const submit = document.querySelector('#submit');
+      submit.addEventListener('click', (event) => {
+        event.preventDefault();
+        const form = document.querySelector('form');
+        let data = { schedules: [] };
+        const fieldsets = form.querySelectorAll('fieldset');
+        Array.from(fieldsets).forEach(fieldset => {
+          const result = {};
+
+          const select = fieldset.querySelector('select');
+          result.staff_id = select.value;
+
+          const date = fieldset.querySelector('.date');
+          result.date = date.value;
+
+          const time = fieldset.querySelector('.time');
+          result.time = time.value;
+
+          data.schedules.push(result);
+        });
+
+        data = JSON.stringify(data);
+
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://localhost:3000/api/schedules');
+        request.setRequestHeader('Content-Type', 'application/json');
+
+        request.addEventListener('load', event => {
+          alert(request.responseText);
+        });
+
+        request.send(data);
+      });
+
+    });
+  </script>
+</head>
+<body>
+  <button id="add_schedules">Add more schedules</button>
+  <form method="POST" action="http://localhost:3000/api/schedules">
+    <fieldset id="schedule1">
+      <legend>Schedule 1</legend>
+      <label>
+        Staff Name:
+        <select name="staff_id">
+        </select>
+      </label>
+      <label>
+        Date:
+        <input type="text" name="date" class = "date" placeholder="mm-dd-yy" />
+      </label>
+      <label>
+        Time:
+        <input type="text" name="time" class = "time" placeholder="hh:mm" />
+      </label>
+    </fieldset>
+    <button type="submit" id="submit">Submit</button>
+  </form>
+</body>
+</html>

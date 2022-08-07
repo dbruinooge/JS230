@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Time Slots</title>
+  <link rel="icon" href="data:,">
+  <style>
+    label {
+      display: block;
+      padding: 10px 0;
+    }
+  </style>
+  <script>
+
+    function resetForms() {
+      const select = document.querySelector('select');
+      Array.from(select.childNodes).forEach(child => select.removeChild(child));
+      populateSchedules();
+      const div = document.querySelector('#student_details_container');
+      div.remove();
+
+      document.querySelector('#booking_email').value = '';
+    }
+
+    function newStudentDetails(sequence) {
+      const div = document.createElement('div');
+      div.id = 'student_details_container';
+
+      const header = document.createElement('h1');
+      header.textContent = 'Please provide new student details';
+      div.appendChild(header);
+
+      const studentDetails = document.createElement('form');
+      div.appendChild(studentDetails);
+
+      const emailLabel = document.createElement('label');
+      emailLabel.textContent = 'Email:';
+      const emailInput = document.createElement('input');
+      emailInput.setAttribute('type', 'email');
+      emailInput.setAttribute('name', 'email');
+      emailInput.value = document.querySelector('#booking_email').value;
+      emailLabel.appendChild(emailInput);
+      studentDetails.appendChild(emailLabel);
+
+      const nameLabel = document.createElement('label');
+      nameLabel.textContent = 'Name:';
+      const nameInput = document.createElement('input');
+      nameInput.setAttribute('type', 'text');
+      nameInput.setAttribute('name', 'name');
+      nameLabel.appendChild(nameInput);
+      studentDetails.appendChild(nameLabel);
+
+      const sequenceLabel = document.createElement('label');
+      sequenceLabel.textContent = 'Booking Sequence:';
+      const sequenceInput = document.createElement('input');
+      sequenceInput.setAttribute('type', 'text');
+      sequenceInput.setAttribute('name', 'sequence');
+      sequenceInput.value = sequence;
+      sequenceLabel.appendChild(sequenceInput);
+      studentDetails.appendChild(sequenceLabel);
+
+      const button = document.createElement('button');
+      button.setAttribute('type', 'button');
+      button.textContent = 'Submit';
+      studentDetails.appendChild(button);
+
+      document.body.insertAdjacentElement('beforeend', div);
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        const formData = new FormData(studentDetails);
+        const jsonData = {
+          email: formData.get('email'),
+          name: formData.get('name'),
+          booking_sequence: formData.get('sequence'),
+        };
+
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://localhost:3000/api/students');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify(jsonData));
+
+        request.addEventListener('load', (event) => {
+          if (request.status === 201) {
+            alert(request.response);
+            form = document.querySelector('#schedule_form');
+            const formData = new FormData(form);
+            const jsonData = { id: formData.get('schedule'), student_email: formData.get('email') };
+
+            const bookingRequest = new XMLHttpRequest();
+            bookingRequest.open('POST', 'http://localhost:3000/api/bookings');
+            bookingRequest.setRequestHeader('Content-Type', 'application/json');
+            bookingRequest.send(JSON.stringify(jsonData));
+            bookingRequest.addEventListener('load', event => {
+              alert('Booked');
+              resetForms();
+            })
+          }
+        });
+      })
+    }
+
+    function populateSchedules() {
+      const select = document.querySelector('select');
+
+      const schedulesRequest = new XMLHttpRequest();
+      schedulesRequest.responseType = 'json';
+      schedulesRequest.open('GET', 'http://localhost:3000/api/schedules');
+      schedulesRequest.send();
+
+      schedulesRequest.addEventListener('load', (event) => {
+        const schedules = schedulesRequest.response;
+
+        const staffsRequest = new XMLHttpRequest();
+        staffsRequest.responseType = 'json';
+        staffsRequest.open('GET', 'http://localhost:3000/api/staff_members');
+        staffsRequest.send();
+
+        staffsRequest.addEventListener('load', (event) => {
+          const staffs = staffsRequest.response;
+
+          schedules.forEach(schedule => {
+            if (!schedule.student_email) {
+              const option = document.createElement('option');
+              const staffName = staffs.find(({id}) => id === schedule.staff_id).name;
+              option.value = schedule.id;
+              option.textContent = `${staffName} | ${schedule.date} | ${schedule.time}`;
+              select.appendChild(option);
+            }
+          });
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateSchedules();
+
+      const button = document.querySelector('#submit_schedule');
+      const form = document.querySelector('form');
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const jsonData = { id: formData.get('schedule'), student_email: formData.get('email') };
+
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://localhost:3000/api/bookings');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify(jsonData));
+        request.addEventListener('load', event => {
+          if (request.status === 204) {
+            alert('Booked');
+            resetForms();
+          } else if (request.status === 404) {
+            alert(request.response);
+            const responseParts = request.response.split(' ');
+            const sequence = responseParts[responseParts.length - 1];
+            newStudentDetails(sequence);
+          }
+        });
+      });
+
+
+    });
+  </script>
+</head>
+<body>
+  <h1>Schedules</h1>
+  <form id="schedule_form">
+    <label>
+      Please select one schedule
+      <select name="schedule">
+      </select>
+    </label>
+    <label>
+      Email
+      <input type="email" name="email" id="booking_email" />
+    </label>
+    <button type="submit" id="submit_schedule">Submit</button>
+  </form>
+</body>
+</html>

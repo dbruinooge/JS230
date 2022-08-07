@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Adding Schedules</title>
+  <link rel="icon" href="data:,">
+  <style>
+
+  </style>
+  <script>
+    function cancelSchedule(scheduleId) {
+      const request = new XMLHttpRequest();
+      request.open('DELETE', `http://localhost:3000/api/schedules/${scheduleId}`);
+      request.send();
+      request.addEventListener('load', event => {
+        if (request.status === 204) {
+          alert('Schedule successfuly canceled');
+        } else {
+          alert(request.response);
+        }
+      });
+    }
+
+    function cancelBooking(bookingId) {
+      const request = new XMLHttpRequest();
+      request.open('PUT', `http://localhost:3000/api/bookings/${bookingId}`);
+      request.send();
+      request.addEventListener('load', event => {
+        if (request.status === 204) {
+          alert('Booking successfuly canceled');
+        } else {
+          alert(request.response);
+        }
+      });
+    }
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

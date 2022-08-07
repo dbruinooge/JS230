@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Adding Staff</title>
+  <link rel="icon" href="data:,">
+  <style>
+    form label {
+      display: block;
+      padding-bottom: 10px;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      const button = document.querySelector('button');
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        request = new XMLHttpRequest();
+        request.open('POST', `http://localhost:3000/api/staff_members`);
+        const data = new FormData(form);
+
+        request.addEventListener('load', event => {
+          if (request.status === 201) {
+            const result = JSON.parse(request.response);
+            alert(`Successfully created staff with id: ${result.id}`);
+            form.reset();
+          } else {
+            alert(request.responseText);
+          }
+        });
+
+        request.send(data);
+      });
+    });
+  </script>
+</head>
+<body>
+  <form>
+    <label>
+      Email:
+      <input type="email" name="email"/>
+    </label>
+    <label>
+      Name:
+      <input type="text" name="name"/>
+    </label>
+    <Button type="submit">Submit</Button>
+  </form>
+</body>
+</html>

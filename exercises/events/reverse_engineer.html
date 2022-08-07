@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+
+    document.querySelector('html').addEventListener('click', (event) => {
+      if (document.querySelector('#container').contains(event.target)) {
+        return;
+      } else {
+      document.querySelector('#container').style = 'display: none';
+      }
+    });
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

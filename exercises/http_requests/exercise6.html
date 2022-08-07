@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Viewing Bookings</title>
+  <link rel="icon" href="data:,">
+  <style>
+
+  </style>
+  <script>
+    function addDates() {
+      const request = new XMLHttpRequest();
+      request.open('GET', 'http://localhost:3000/api/bookings');
+      request.responseType = 'json';
+      request.send();
+      request.addEventListener('load', event => {
+        const dateList = document.createElement('ul');
+        dateList.id = '#date_list';
+        document.body.appendChild(dateList);
+
+        const dates = request.response;
+        dates.forEach(date => {
+          const listItem = document.createElement('li');
+          listItem.textContent = date;
+          listItem.classList.add('date');
+          dateList.appendChild(listItem);
+        });
+
+        const dateElements = document.querySelectorAll('.date');
+        Array.from(dateElements).forEach(date => {
+          addBookingsForDate(date);
+          date.addEventListener('click', event => {
+            const bookings = date.querySelectorAll('li');
+            Array.from(bookings).forEach(booking => booking.style.display = '');
+          });
+        });
+
+      });
+    }
+
+    function addBookingsForDate(date) {
+      const bookingList = document.createElement('ul');
+      date.appendChild(bookingList);
+
+      const request = new XMLHttpRequest();
+      request.open('GET', `http://localhost:3000/api/bookings/${date.textContent}`);
+      request.responseType = 'json';
+      request.send();
+      request.addEventListener('load', event => {
+        request.response.forEach(booking => {
+          const listItem = document.createElement('li');
+          listItem.textContent = booking.join(' | ');
+          listItem.style.display = 'none';
+          bookingList.appendChild(listItem);
+        });
+      });
+    }
+
+    addDates();
+
+  </script>
+</head>
+<body>
+  <h1>Bookings</h1>
+</body>
+</html>

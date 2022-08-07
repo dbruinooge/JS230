@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+
+    function callback1() {
+    console.log('callback1');
+    }
+
+    function callback2() {
+    console.log('callback2');
+    }
+
+    function callback3() {
+    console.log('callback3');
+    }
+
+    function randomizer(...callbacks) {
+      const totalSeconds = callbacks.length * 2;
+      let count = 1;
+      const timer = setInterval(() => {
+        console.log(count);
+        count += 1;
+        if (count > totalSeconds) clearInterval(timer);
+      }, 1000);
+
+      callbacks.forEach(callback => {
+        const seconds = Math.floor(Math.random() * totalSeconds * 1000);
+        setTimeout(() => {
+          callback();
+          console.log(`executed after ${seconds} milliseconds`);
+        }, seconds);
+      });
+    }
+
+    randomizer(callback1, callback2, callback3);
+
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

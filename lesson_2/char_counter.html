@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Character Counter</title>
+  <style>
+
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('keyup', event => {
+        let textarea = document.querySelector('.composer textarea');
+        let counter = document.querySelector('.counter');
+        let button = document.querySelector('.composer button');
+
+        let remaining = 140 - textarea.value.length;
+        counter.textContent = `${remaining} characters remaining`;
+        if (remaining < 0) {
+          textarea.style.color = 'red';
+          button.disabled = true;
+        } else {
+          textarea.style.color = 'black';
+          button.disabled = false;
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="composer">
+    <textarea rows="10" cols="80" placeholder="Enter your message"></textarea>
+      <p class="counter"></p>
+    <button type="submit">Post Message</button>
+  </div>
+</body>
+</html>

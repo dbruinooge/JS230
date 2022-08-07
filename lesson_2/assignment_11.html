@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Preventing Propogation and Default Behaviors</title>
+  <style>
+    button {
+      width: 100px;
+      height: 100px;
+      background: blue;
+      color: white;
+      position: relative;
+      top: 25px;
+      left: 25px;
+    }
+
+    a {
+      display: block;
+      width: 150px;
+      height: 150px;
+      background: red;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('button').addEventListener('click', event => {
+        event.preventDefault();
+        alert('Following the link was prevented.');
+      });
+
+      document.querySelector('a').addEventListener('click', event => {
+        alert('Click event on the anchor tag');
+      }, true);
+    });
+  </script>
+</head>
+<body>
+  <a href="/">
+    <button>View Page</button>
+  </a>
+</body>
+</html>

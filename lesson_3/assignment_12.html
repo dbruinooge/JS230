@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sending JSON via XHR</title>
+  <link rel="icon" href="data:,">
+  <style>
+
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      let request = new XMLHttpRequest();
+      request.open('POST', 'https://ls-230-web-store-demo.herokuapp.com/v1/products');
+      request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      request.setRequestHeader('Authorization', 'token AUTH_TOKEN');
+
+      let obj = {
+        name: 'Toaster',
+        sku: 'TOA22234',
+        price: 600,
+      };
+
+      let data = JSON.stringify(obj);
+
+      request.addEventListener('load', (event) => {
+        console.log(`Item added: ${request.responseText}`);
+      });
+
+      request.send(data);
+
+    });
+  </script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+<!--
+POST /books HTTP/1.1
+Host: ls-230-book-catalog.herokuapp.com
+Content-Type: application/json; charset=utf-8
+Accept: /*/
+
+{"title": "Eloquent Javascript", "author": "Marijn Haverbeke"}
+-->
