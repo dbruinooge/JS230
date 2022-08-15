@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabs</title>
+  <link rel="icon" href="data:,">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    div {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: 50px 250px;
+      gap: 2px;
+      max-width: 800px;
+      background-color: black;
+      border: 2px solid black;
+
+    }
+    article {
+      background-color: lightgreen;
+      grid-column: 1 / 6;
+      grid-row: 2 / 3;
+      font: 5rem Helvetica;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+    li {
+      background-color: lightblue;
+      list-style: none;
+      flex: 1;
+      /*border: 2px solid black;*/
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: 1.5rem Helvetica;
+
+    }
+    ul {
+      grid-column-start: 1;
+      grid-column-end: 6;
+      grid-row-start: 1;
+      grid-row-end: 2;
+      display: flex;
+      gap: 2px;
+    }
+
+  </style>
+  <script>
+    $(() => {
+      $('article[data-item=first]').css('z-index', '1');
+      $('ul').on('click', event => {
+        event.preventDefault();
+        $('article').hide()
+                    .filter(`[data-item=${$(event.target).attr('data-item')}]`)
+                    .show();
+
+      });
+
+
+    });
+  </script>
+</head>
+<body>
+  <div id="wrapper">
+    <ul>
+      <li data-item="first">
+        First
+      </li>
+      <li data-item="second">
+        Second
+      </li>
+      <li data-item="third">
+        Third
+      </li>
+      <li data-item="fourth">
+        Fourth
+      </li>
+      <li data-item="fifth">
+        Fifth
+      </li>
+    </ul>
+    <article data-item="first">
+      First
+    </article>
+    <article data-item="second">
+      Second
+    </article>
+    <article data-item="third">
+      Third
+    </article>
+    <article data-item="fourth">
+      Fourth
+    </article>
+    <article data-item="fifth">
+      Fifth
+    </article>
+  </div>
+</body>
+</html>
