@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Validation, Part 1</title>
+  <link rel="stylesheet" href="validation_1.css">
+  <script src="validation_1.js"></script>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>Form Validation, Part 1</h1>
+      <p class='error'></p>
+    </header>
+    <form novalidate>
+
+      <fieldset>
+        <label>
+          First Name
+          <input type="text" name="first_name" id="first_name" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Last Name
+          <input type="text" name="last_name" id="last_name" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Email
+          <input type="email" name="email" id="email" pattern=".+@.+" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Password
+          <input type="password" name="password" id="password" minlength="5" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Phone Number
+          <input type="text" name="phone_number" id="phone_number" pattern="^\d{3}-\d{3}-\d{4}$"/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <button type="submit">Sign Up</button>
+
+    </form>
+  </div>
+</body>
+</html>

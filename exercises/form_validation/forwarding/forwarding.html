@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Automatic Tab Forwarding</title>
+  <link rel="stylesheet" href="forwarding.css">
+  <script src="forwarding.js"></script>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>Form Validation, Part 1</h1>
+      <p class='error'></p>
+    </header>
+    <form novalidate>
+
+      <fieldset>
+        <label>
+          First Name
+          <input type="text" name="first_name" id="first_name" pattern="a-zA-Z'\s" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Last Name
+          <input type="text" name="last_name" id="last_name" pattern="^\D+$" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Email
+          <input type="email" name="email" id="email" pattern=".+@.+" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Password
+          <input type="password" name="password" id="password" minlength="5" required/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Phone Number
+          <input type="text" name="phone_number" id="phone_number" pattern="^\d{3}-\d{3}-\d{4}$" placeholder="111-222-3333"/>
+          <span class="error"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label id='credit_card'>
+          Credit Card Number
+          <input type="text" name="credit_card" pattern = "^\d{4}$" maxlength = "4" size="1"/> -
+          <input type="text" name="credit_card" pattern = "^\d{4}$" maxlength = "4" size="1"/> -
+          <input type="text" name="credit_card" pattern = "^\d{4}$" maxlength = "4" size="1"/> -
+          <input type="text" name="credit_card" pattern = "^\d{4}$" maxlength = "4" size="1"/>
+        </label>
+      </fieldset>
+
+      <button type="submit">Sign Up</button>
+
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+
+
+      const stopwatch = document.querySelector('#stopwatch');
+      const start = document.querySelector('#start');
+      const stop = document.querySelector('#stop');
+
+      start.addEventListener('click', event => {
+        event.preventDefault();
+
+        const startTime = Date.now();
+        stop.addEventListener('click', event => {
+          event.preventDefault();
+          clearInterval(id);
+        });
+
+        let id = setInterval(() => {
+            stopwatch.innerHTML = Date.now() - startTime;
+          }, 100);
+
+      });
+
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="stopwatch"></div>
+  <a href='#' id="start">Start</a>
+  <a href='#' id="stop">Stop</a>
+</body>
+</html>
