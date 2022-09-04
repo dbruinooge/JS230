@@ -1,27 +1,18 @@
-document.addEventListener('DOMContentLoaded', () => {
+let timeout;
 
-  let timeoutId;
-
-  document.addEventListener('mouseover', event => {
-    if (!event.target.tagName === 'IMG') {
-      return;
-    }
-
-    timeoutId = setTimeout(() => {
-      const element = event.target.parentElement.querySelector('p');
-      element.classList.remove('invisible');
-      element.classList.add('visible');
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('mouseenter', event => {
+    event.stopPropagation();
+    timeout = setTimeout(() => {
+      event.target.closest('figure').querySelector('figcaption').className = 'show';
     }, 2000);
   });
+});
 
-  document.addEventListener('mouseout', event => {
-    if (!event.target.tagName === 'IMG') {
-      return;
-    }
-
-    if (timeoutId) clearTimeout(timeoutId);
-    const element = event.target.parentElement.querySelector('p');
-    element.classList.remove('visible');
-    element.classList.add('invisible');
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('mouseleave', event => {
+    event.stopPropagation();
+    event.target.closest('figure').querySelector('figcaption').className = 'hide';
+    clearTimeout(timeout);
   });
 });
