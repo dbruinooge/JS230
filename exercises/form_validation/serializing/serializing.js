@@ -90,11 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     creditCard.addEventListener('focusout', event => {
       if (creditCard.validity.valid) {
-        console.log('ok');
         creditCardsError.textContent = '';
         updateMainErrorMessage();
       } else if (creditCard.validity.tooShort) {
-        console.log('not ok');
         creditCardsError.textContent = 'Each credit card blank must have 4 digits.';
       }
     });
@@ -106,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   [...creditCards].forEach((creditCard, idx) => {
     creditCard.addEventListener('input', event => {
-      if (creditCard.value.length === 4) {
+      if (idx < 3 && creditCard.value.length === 4) {
         creditCards[idx + 1].focus();
       }
     });
@@ -115,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (event.target.checkValidity()) {
-      console.log('everything ok here!')
+      submitForm();
     } else {
       document.querySelector('p.error').textContent = 'Fix errors before submitting this form.';
     }
@@ -124,8 +122,36 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateMainErrorMessage() {
     if (form.checkValidity()) {
       document.querySelector('p.error').textContent = '';
-      console.log('everything fixed now!');
     }
+  }
+
+  function submitForm() {
+    // const request = new XMLHttpRequest();
+    // request.open('POST', '');
+    // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // request.addEventListener('load', event => {
+
+    // });
+
+    // request.send();
+    let params = []
+
+    const data = new FormData(form);
+    params.push(`${encodeURIComponent('first_name')}=${encodeURIComponent(data.get('first_name'))}`);
+    params.push(`${encodeURIComponent('last_name')}=${encodeURIComponent(data.get('last_name'))}`);
+    params.push(`${encodeURIComponent('email')}=${encodeURIComponent(data.get('email'))}`);
+    params.push(`${encodeURIComponent('password')}=${encodeURIComponent(data.get('password'))}`);
+    if (data.get('phone_number')) {
+      params.push(`${encodeURIComponent('phone_number')}=${encodeURIComponent(data.get('phone_number'))}`);
+    }
+
+    if (data.get('credit_card')) {
+      params.push(`${encodeURIComponent('credit_card')}=${encodeURIComponent(data.getAll('credit_card').join(''))}`);
+    }
+
+    params = '?' + params.join('&');
+    document.querySelector('#serialized_form').textContent = params;
+
   }
 
 });

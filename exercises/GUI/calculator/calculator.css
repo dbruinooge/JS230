@@ -1,0 +1,69 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2rem 0;
+  touch-action: manipulation;
+}
+
+#container {
+  height: 500px;
+  width: 400px;
+  display: grid;
+  background-color: rgb(75, 75, 75);
+  padding: .5rem;
+  border-radius: 5px;
+  gap: 2px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  grid-template-areas:
+    "screen screen screen screen"
+    "screen screen screen screen"
+    "modulo CE     C      divide"
+    "seven  eight  nine   multiply"
+    "four   five   six    subtract"
+    "one    two    three  add"
+    "NEG    zero   dot    equals";
+}
+
+#screen {
+  grid-area: screen;
+  background-color: lightgrey;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: .7rem;
+}
+
+a {
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  font-size: 2rem;
+}
+
+#operation, #entry {
+  flex: 1;
+  text-align: right;
+}
+
+#operation {
+  border-bottom: 1px solid darkgrey;
+  font-size: 1.3rem;
+  line-height: 2.5rem;
+}
+
+#entry {
+  font-size: 2.5rem;
+  line-height: 4.2rem;
+}
+

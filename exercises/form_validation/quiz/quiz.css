@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 2rem;
+  width: 600px;
+}
+
+fieldset {
+  padding: 1rem;
+  margin: 1rem;
+}
+
+header {
+  margin-left: 1.5rem;
+}
+
+.option_wrapper {
+  padding: .5rem;
+}
+
+input {
+  margin-right: .5rem;
+}
+
+#buttons {
+  margin: 1.5rem;
+}
+
+.result p {
+  border: 1px solid black;
+}
+
+#buttons a {
+  text-decoration: none;
+  padding: .5rem;
+  border: 1px solid black;
+}
+
+#submit_button {
+  background-color: lightgrey;
+}
+
+#reset_button {
+  background-color: lightgreen;
+}
+
+.result p {
+  padding: .2rem;
+}

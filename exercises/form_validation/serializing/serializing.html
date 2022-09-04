@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Automatic Tab Forwarding</title>
-  <link rel="stylesheet" href="forwarding.css">
-  <script src="forwarding.js"></script>
+  <title>Sanitizing Form Data</title>
+  <link rel="stylesheet" href="serializing.css">
+  <script src="serializing.js"></script>
   <link rel="icon" href="data:,">
 </head>
 <body>
@@ -17,7 +17,7 @@
       <fieldset>
         <label>
           First Name
-          <input type="text" name="first_name" id="first_name" pattern="a-zA-Z'\s" required/>
+          <input type="text" name="first_name" id="first_name" pattern="^\D+$" required/>
           <span class="error"></span>
         </label>
       </fieldset>
@@ -68,6 +68,13 @@
       <button type="submit">Sign Up</button>
 
     </form>
+  </div>
+
+  <div>
+    <heading>
+      <h1>Serialized Form</h1>
+    </heading>
+    <p id="serialized_form"></p>
   </div>
 </body>
 </html>
