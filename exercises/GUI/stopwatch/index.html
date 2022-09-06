@@ -1,39 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+    body {
+      margin-left: 75px;
+    }
+
+    p {
+      height: 50px;
+    }
+
+    a.hide {
+      display: none;
+    }
+
+    a.show {
+      display: inline;
+    }
+  </style>
   <script>
 
     document.addEventListener('DOMContentLoaded', () => {
+      const MILLISECONDS_PER_HOUR = 3600000;
+      const MILLISECONDS_PER_MINUTE = 60000;
+      const MILLISECONDS_PER_SECOND = 1000;
+      const MILLISECONDS_PER_HUNDREDTH = 10;
 
-
-
-      const stopwatch = document.querySelector('#stopwatch');
+      const time = document.querySelector('#time');
       const start = document.querySelector('#start');
       const stop = document.querySelector('#stop');
+      const reset = document.querySelector('#reset');
+
+      let interval;
+      let startTime;
+      let elapsedTime;
+
+      function displayTime(milliseconds) {
+        let hours = milliseconds / MILLISECONDS_PER_HOUR;
+        let minutes = milliseconds %  MILLISECONDS_PER_HOUR /  MILLISECONDS_PER_MINUTE;
+        let seconds = milliseconds % MILLISECONDS_PER_MINUTE / MILLISECONDS_PER_SECOND;
+        let hundredths = milliseconds % MILLISECONDS_PER_SECOND /  MILLISECONDS_PER_HUNDREDTH;
+        [hours, seconds, minutes, hundredths] =
+          [hours, seconds, minutes, hundredths].map(unit => {
+            unit = Math.floor(unit);
+            return unit < 10 ? '0' + String(unit) : String(unit);
+        });
+
+        time.textContent = `${hours} : ${minutes} : ${seconds} : ${hundredths}`;
+      }
+
+      function resetTime() {
+        startTime = null;
+        elapsedTime = 0;
+        displayTime(elapsedTime);
+      }
+
+      resetTime();
 
       start.addEventListener('click', event => {
         event.preventDefault();
-
-        const startTime = Date.now();
-        stop.addEventListener('click', event => {
-          event.preventDefault();
-          clearInterval(id);
-        });
-
-        let id = setInterval(() => {
-            stopwatch.innerHTML = Date.now() - startTime;
-          }, 100);
-
+        start.className = 'hide';
+        stop.className = 'show';
+        startTime = Date.now();
+        interval = setInterval(() => {
+          displayTime(elapsedTime + (Date.now() - startTime));
+        }, 10);
       });
 
+      stop.addEventListener('click', event => {
+        event.preventDefault();
+        elapsedTime += Date.now() - startTime;
+        startTime = null;
+        start.className = 'show';
+        stop.className = 'hide';
+        clearInterval(interval);
+      });
+
+      reset.addEventListener('click', event =>{
+        event.preventDefault();
+        start.className = 'show';
+        stop.className = 'hide';
+        resetTime();
+        clearInterval(interval);
+      });
     });
 
   </script>
 </head>
 
 <body>
-  <div id="stopwatch"></div>
-  <a href='#' id="start">Start</a>
-  <a href='#' id="stop">Stop</a>
+  <p id="time"></p>
+  <a href="#" id="start">Start</a>
+  <a href="#" id="stop" class="hide">Stop</a>
+  <a href="#" id="reset">Reset</a>
 </body>
 </html>

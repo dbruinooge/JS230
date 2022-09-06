@@ -1,21 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;
+label {
+  display: block;
+  margin: 10px;
 }
 
-body {
-  padding: 1rem;
-}
-
-header {
-  padding-bottom: 1rem;
-}
-
-fieldset {
-  border: none;
-  padding-bottom: 1rem;
-}
-
-.error {
-  color: red;
+input.invalid {
+  border: 2px solid red;
 }

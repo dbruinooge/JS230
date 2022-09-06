@@ -1,131 +1,100 @@
-document.addEventListener('DOMContentLoaded', () => {
+const form = document.querySelector('form');
+let formInvalid = false;
 
-  const form = document.querySelector('form');
+function setSpanMessage(inputElement, message) {
+  const span = inputElement.parentNode.querySelector('.error');
+  span.textContent = message;
+}
 
-  const firstName = document.querySelector('#first_name');
-  const firstNameError = document.querySelector('#first_name + span.error');
-  const lastName = document.querySelector('#last_name');
-  const lastNameError = document.querySelector('#last_name + span.error');
-  const email = document.querySelector('#email');
-  const emailError = document.querySelector('#email + span.error');
-  const password = document.querySelector('#password');
-  const passwordError = document.querySelector('#password + span.error');
-  const phoneNumber = document.querySelector('#phone_number');
-  const phoneNumberError = document.querySelector('#phone_number + span.error');
-  const creditCards = document.querySelectorAll('#credit_card input');
-  const creditCardsError = document.querySelector('#credit_card span.error');
+function handleBlur(event) {
+  if (formInvalid) {
+    checkFormValidity();
+  } else {
+    event.target.checkValidity();
+  }
+}
 
+function handleFocus(event) {
+  setSpanMessage(event.target, '')
+  event.target.classList.remove('invalid');
+}
 
-  [firstName, lastName, email, password, phoneNumber].forEach(input => {
-    input.addEventListener('focus', event => {
-      input.parentNode.querySelector('span.error').textContent = '';
-    });
-  });
-
-  [firstName, lastName].forEach(name => {
-    const error = name.parentNode.querySelector('span.error');
-    const prefix = name.id.split('_')[0];
-    const capPrefix = prefix[0].toUpperCase() + prefix.slice(1);
-    name.addEventListener('focusout', event => {
-      if (name.validity.valid) {
-        error.textContent = '';
-        updateMainErrorMessage();
-      } else if (name.validity.valueMissing) {
-        error.textContent = `${capPrefix} name is required.`;
-      } else if (name.validity.patternMismatch) {
-        error.textContent = `${capPrefix} contains invalid characters.`;
-      }
-    });
-
-    name.addEventListener('keydown', event => {
-      if (!event.key.match(/[a-zA-Z'\s]/)) {
-        event.preventDefault();
-        error.textContent = `Invalid character.`;
-      } else {
-        error.textContent = '';
-        updateMainErrorMessage();
-      }
-    })
-  });
-
-  email.addEventListener('focusout', event => {
-    if (email.validity.valid) {
-      emailError.textContent = '';
-      updateMainErrorMessage();
-    } else {
-      if (email.validity.valueMissing) {
-        emailError.textContent = 'Email address is required.';
-      } else if (email.validity.patternMismatch) {
-        emailError.textContent = 'Entered value needs to be an email address.';
-      }
+function handleInvalid(event) {
+  const validity = event.target.validity;
+  event.target.classList.add('invalid');
+  let message;
+  if (validity.patternMismatch) {
+    if (event.target.id === 'phone') {
+      message = 'Please enter the phone number in the following format: ###-###-####.';
+    } else if (event.target.id === 'email') {
+      message = 'Please enter a valid email address.'
+    } else if (event.target.classList.contains('name')) {
+      message = "Names may contain only letters, spaces, and apostrophes."
     }
-  });
-
-  password.addEventListener('focusout', event => {
-    if (password.validity.valid) {
-      passwordError.textContent = '';
-      updateMainErrorMessage();
-    } else if (password.validity.valueMissing) {
-      passwordError.textContent = 'Password is required.';
-    } else if (password.validity.tooShort) {
-      passwordError.textContent = 'Password must be at least 10 characters.';
+  } else if (validity.tooShort) {
+    if (event.target.id === 'password') {
+      message = 'Password is too short (min 10 characters).'
     }
-  });
-
-  phoneNumber.addEventListener('focusout', event => {
-    if (phoneNumber.validity.valid) {
-      phoneNumberError.textContent = '';
-      updateMainErrorMessage();
-    } else if (phoneNumber.validity.patternMismatch) {
-      phoneNumberError.textContent = 'Please enter a valid phone number in the format ###-###-####';
-    }
-  });
-
-  creditCards.forEach(creditCard => {
-    creditCard.addEventListener('keydown', event => {
-      if (!event.key.match(/\d/)) {
-        event.preventDefault();
-      }
-    });
-
-    creditCard.addEventListener('focusout', event => {
-      if (creditCard.validity.valid) {
-        console.log('ok');
-        creditCardsError.textContent = '';
-        updateMainErrorMessage();
-      } else if (creditCard.validity.tooShort) {
-        console.log('not ok');
-        creditCardsError.textContent = 'Each credit card blank must have 4 digits.';
-      }
-    });
-
-    creditCard.addEventListener('focus', event => {
-      creditCardsError.textContent = '';
-    });
-  });
-
-  [...creditCards].forEach((creditCard, idx) => {
-    creditCard.addEventListener('input', event => {
-      if (creditCard.value.length === 4) {
-        creditCards[idx + 1].focus();
-      }
-    });
-  });
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (event.target.checkValidity()) {
-      console.log('everything ok here!')
-    } else {
-      document.querySelector('p.error').textContent = 'Fix errors before submitting this form.';
-    }
-  });
-
-  function updateMainErrorMessage() {
-    if (form.checkValidity()) {
-      document.querySelector('p.error').textContent = '';
-      console.log('everything fixed now!');
+  } else if (validity.tooLong) {
+    if (event.target.id === 'credit_card') {
+      message = "Please enter no more than 4 numbers per entry."
     }
   }
+    else if (validity.valueMissing) {
+    message = 'This field is required.'
+  }
 
+  setSpanMessage(event.target, message);
+}
+
+function checkFormValidity() {
+  if (!form.checkValidity()) {
+    document.querySelector('p.error').textContent = "Please fix errors.";
+    formInvalid = true;
+    return false;
+  } else {
+    document.querySelector('p.error').textContent = "";
+    formInvalid = false;
+    return true;
+  }
+}
+
+[...form.elements].forEach(element => {
+  element.addEventListener('blur', handleBlur);
+  element.addEventListener('invalid', handleInvalid);
+  element.addEventListener('focus', handleFocus);
+});
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  if (checkFormValidity()) alert('Form successfully submitted.');
+});
+
+[...document.getElementsByClassName('name')].forEach(element => {
+  element.addEventListener('keypress', event => {
+    if (!event.key.match(/[a-zA-Z'\s]/)) {
+      event.preventDefault();
+    }
+  });
+});
+
+[...document.getElementsByClassName('credit_card')].forEach((element, idx) => {
+  element.addEventListener('keypress', event => {
+    if (!event.key.match(/\d/)) {
+      event.preventDefault();
+    }
+  });
+  if (idx <= 2) {
+    element.addEventListener('input', event => {
+      if (element.value.length === 4) {
+        element.nextElementSibling.focus();
+      }
+    })
+  }
+});
+
+document.querySelector('#phone').addEventListener('keypress', event => {
+  if (!event.key.match(/[\d\-]/)) {
+    event.preventDefault();
+  }
 });

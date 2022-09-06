@@ -1,80 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sanitizing Form Data</title>
+  <title>Form Validation Exercises</title>
   <link rel="stylesheet" href="serializing.css">
-  <script src="serializing.js"></script>
   <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="serializing.js" defer></script>
 </head>
 <body>
-  <div id="container">
-    <header>
-      <h1>Form Validation, Part 1</h1>
-      <p class='error'></p>
-    </header>
-    <form novalidate>
-
-      <fieldset>
-        <label>
-          First Name
-          <input type="text" name="first_name" id="first_name" pattern="^\D+$" required/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <label>
-          Last Name
-          <input type="text" name="last_name" id="last_name" pattern="^\D+$" required/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <label>
-          Email
-          <input type="email" name="email" id="email" pattern=".+@.+" required/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <label>
-          Password
-          <input type="password" name="password" id="password" minlength="5" required/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <label>
-          Phone Number
-          <input type="text" name="phone_number" id="phone_number" pattern="^\d{3}-\d{3}-\d{4}$" placeholder="111-222-3333"/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <label id='credit_card'>
-          Credit Card Number
-          <input type="text" name="credit_card" pattern = "^\d{4}$" minlength = "4" maxlength = "4" size="1"/> -
-          <input type="text" name="credit_card" pattern = "^\d{4}$" minlength = "4" maxlength = "4" size="1"/> -
-          <input type="text" name="credit_card" pattern = "^\d{4}$" minlength = "4" maxlength = "4" size="1"/> -
-          <input type="text" name="credit_card" pattern = "^\d{4}$" minlength = "4" maxlength = "4" size="1"/>
-          <span class="error"></span>
-        </label>
-      </fieldset>
-
-      <button type="submit">Sign Up</button>
-
-    </form>
-  </div>
-
-  <div>
-    <heading>
-      <h1>Serialized Form</h1>
-    </heading>
-    <p id="serialized_form"></p>
-  </div>
+  <h1>Please enter your information:</h1>
+  <p class="error"></p>
+  <form novalidate>
+    <Label>
+      First Name
+      <input type="text" class="name" name="first_name" id="first_name" pattern="^[a-zA-Z'\s]+$" required>
+      <span class="error"></span>
+    </Label>
+    <label>
+      Last Name
+      <input type="text" class="name" name="last_name" id="last_name" pattern="^[a-zA-Z'\s]+$" required>
+      <span class="error"></span>
+    </label>
+    <label>
+      Email
+      <input type="text" name="email" id="email" pattern=".+@.+" required>
+      <span class="error"></span>
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" id="password" minlength="10" required>
+      <span class="error"></span>
+    </label>
+    <label>
+      Phone
+      <input type="text" placeholder="###-###-####" name="phone" id="phone" pattern="^\d{3}-\d{3}-\d{4}$">
+      <span class="error"></span>
+    </label>
+    <label>
+      Credit Card
+      <input type="text" name="credit_card" class="credit_card" maxlength="4" size="1"> -
+      <input type="text" name="credit_card" class="credit_card" maxlength="4" size="1"> -
+      <input type="text" name="credit_card" class="credit_card" maxlength="4" size="1"> -
+      <input type="text" name="credit_card" class="credit_card" maxlength="4" size="1">
+      <span class="error"></span>
+    </label>
+    <button type="submit">Sign Up</button>
+  </form>
+  <h2>Serialized Form</h2>
+  <p id="query_string"></p>
 </body>
 </html>

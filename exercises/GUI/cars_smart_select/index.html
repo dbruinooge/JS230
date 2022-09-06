@@ -1,75 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Cars Smart Select</title>
-  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-  <link rel="stylesheet" href="public/stylesheets/whitespace-reset.css">
+  <title>GUI Exercises</title>
   <link rel="stylesheet" href="public/stylesheets/cars_smart_select.css">
-  <script src="public/javascripts/cars_smart_select.js"></script>
   <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="public/javascripts/cars_smart_select.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>Buy Used Cars</h1>
-    <div id="filters"></div>
-  </header>
-  <main>
-    <div id="cars"></div>
-  </main>
+  <div id="wrapper">
+    <header>
+      <h1>Buy Used Cars</h1>
+      <form>
+        <label>
+          Make
+          <select name="make" id="make"></select>
+        </label>
+        <label>
+          Model
+          <select name="model" id="model"></select>
+        </label>
+        <label >
+          Price
+          <select name="price" id="price"></select>
+        </label>
+        <label>
+          Year
+          <select name="year" id="year"></select>
+        </label>
+        <button type="submit">Filter</button>
+      </form>
+    </header>
 
-  <script id="filters_template" type="text/x-handlebars-template">
-      <label for="make_select">Make</label>
-      <select name="make" id="make_select">
-        <option value="">All</option>
-        {{#each makes}}
-          <option value="{{.}}">{{.}}</option>
-        {{/each}}
-      </select>
+    <main>
+    </main>
+  </div>
 
-      <label for="model_select">Model</label>
-      <select name="model" id="model_select">
-        <option value="">All</option>
-        {{#each models}}
-          <option value="{{.}}">{{.}}</option>
-        {{/each}}
-      </select>
-
-      <label for="price_select">Price</label>
-      <select name="price" id="price_select">
-        <option value="">Any</option>
-        {{#each prices}}
-          <option value="{{.}}">{{.}}</option>
-        {{/each}}
-      </select>
-
-      <label for="year_select">Year</label>
-      <select name="year" id="year_select">
-        <option value="">Any</option>
-        {{#each years}}
-          <option value="{{.}}">{{.}}</option>
-        {{/each}}
-      </select>
-
-      <button class="filter_btn">Filter</button>
-  </script>
-
-  <script id="cars_template" type="text/x-handlebars-templates">
+  <script id="template" type="text/x-handlebars-template">
     {{#each cars}}
-      {{> car_template}}
-    {{/each}}
-  </script>
-
-  <script id="car_template" type="text/x-handlebars-templates">
-    <div class="car">
       <figure>
         <img src="{{image}}">
+        <p>{{make}} {{model}}</p>
+        <p>Year: {{year}}</p>
+        <p>Price: {{price}}</p>
       </figure>
-      <h2>{{make}} {{model}}</h2>
-      <p class="year">Year: {{year}}</p>
-      <p class="price">Price: ${{price}}</p>
-      <a href="#">Buy</a>
-    </div>
+    {{/each}}
   </script>
 </body>
 </html>
